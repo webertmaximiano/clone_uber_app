@@ -58,7 +58,7 @@ Para garantir um fluxo de trabalho eficiente e evitar repetições, seguirei rig
 
 2.  **`@CONTEXT.md` (Contexto Geral do Projeto):**
     *   Este arquivo será mantido atualizado com um resumo de alto nível do progresso do projeto e quaisquer problemas conhecidos.
-    *   Devo atualizar o `@CONTEXT.md` sempre que houver uma mudança significativa no estado do projeto ou na conclusão de uma seção importante do `action_plan.md`.
+    *   Devo atualizar o `@CONTEXT.CONTEXT.md` sempre que houver uma mudança significativa no estado do projeto ou na conclusão de uma seção importante do `action_plan.md`.
 
 3.  **Priorização:**
     *   Minha prioridade máxima é manter o `action_plan.md` e o `@CONTEXT.md` precisos e atualizados.
