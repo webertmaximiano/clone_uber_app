@@ -1,1 +1,32 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"clone-uber-app-c21a1","appId":"1:810359951312:android:6f31c9dcb952e92f1033d5","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"clone-uber-app-c21a1","configurations":{"android":"1:810359951312:android:6f31c9dcb952e92f1033d5","ios":"1:810359951312:ios:f9586947cccef17b1033d5","web":"1:810359951312:web:4b96d4d86e369fef1033d5"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "clone-uber-app-c21a1",
+          "appId": "1:810359951312:android:6f31c9dcb952e92f1033d5",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "clone-uber-app-c21a1",
+          "configurations": {
+            "android": "1:810359951312:android:6f31c9dcb952e92f1033d5",
+            "ios": "1:810359951312:ios:f9586947cccef17b1033d5",
+            "web": "1:810359951312:web:4b96d4d86e369fef1033d5"
+          }
+        }
+      }
+    }
+  },
+  "emulators": {
+    "auth": {
+      "port": 9099
+    },
+    "ui": {
+      "enabled": true
+    },
+    "singleProjectMode": true
+  }
+}

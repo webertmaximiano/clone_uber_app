@@ -2,9 +2,6 @@
 
 Este documento detalha o passo a passo para o desenvolvimento do aplicativo do passageiro do nosso clone do Uber.
 
-> **Arquivo de Dicas:** Para aprofundar seus conhecimentos, consulte nosso arquivo de [Dicas e Boas Práticas de Flutter](./DICAS_FLUTTER.md).
-
-
 ## Pré-requisitos
 
 Antes de começar, certifique-se de que você configurou seu ambiente de desenvolvimento conforme descrito no [`README.md`](../README.md) principal do projeto.
@@ -17,76 +14,35 @@ Antes de começar, certifique-se de que você configurou seu ambiente de desenvo
 
 Nesta etapa, conectamos nosso aplicativo Flutter a um projeto Firebase.
 
-**1.1. Crie um Projeto no Firebase:**
-   - Acesse o [console do Firebase](https://console.firebase.google.com/).
-   - Crie um novo projeto (ex: `clone-uber-app`).
+*   **Crie um Projeto no Firebase:** Acesse o [console do Firebase](https://console.firebase.google.com/) e crie um novo projeto (ex: `clone-uber-app`).
+*   **Instale a CLI do FlutterFire:** Em qualquer terminal, execute `dart pub global activate flutterfire_cli`.
+*   **Configure o App com o FlutterFire:** Navegue até `users_app/` e execute `flutterfire configure --project=clone-uber-app-c21a1`.
+*   **Adicione as Dependências do Firebase:** Ainda em `users_app/`, execute `flutter pub add firebase_core firebase_auth cloud_firestore google_sign_in`.
+*   **Inicialize o Firebase no Código:** Modifique `lib/main.dart` para inicializar o Firebase e conectar ao emulador em modo de debug.
 
-**1.2. Instale a CLI do FlutterFire:**
-   - Em qualquer terminal, execute o comando global para instalar a ferramenta de linha de comando do FlutterFire:
-     ```bash
-     dart pub global activate flutterfire_cli
-     ```
-
-**1.3. Configure o App com o FlutterFire:**
-   - **Navegue até a pasta do projeto:**
-     ```bash
-     cd users_app
-     ```
-   - Execute o comando de configuração, substituindo `clone-uber-app-c21a1` pelo ID do seu projeto Firebase:
-     ```bash
-     flutterfire configure --project=clone-uber-app-c21a1
-     ```
-   - Este comando gera o arquivo `lib/firebase_options.dart`.
-
-**1.4. Adicione as Dependências do Firebase:**
-   - Ainda no diretório `users_app`, adicione os pacotes necessários para o Firebase funcionar:
-     ```bash
-     # Pacote principal do Firebase
-     flutter pub add firebase_core
-
-     # Pacotes para autenticação e banco de dados
-     flutter pub add firebase_auth cloud_firestore
-     ```
-
-**1.5. Inicialize o Firebase no Código:**
-   - Modifique o arquivo `lib/main.dart` para garantir que o Firebase seja inicializado antes do app iniciar.
-
-   ```dart
-   // lib/main.dart
-
-   import 'package:flutter/material.dart';
-   import 'package:firebase_core/firebase_core.dart';
-   import 'firebase_options.dart';
-
-   void main() async { // 1. Transforme o main em assíncrono
-     // 2. Garanta que os Widgets do Flutter foram inicializados
-     WidgetsFlutterBinding.ensureInitialized();
-     
-     // 3. Inicialize o Firebase
-     await Firebase.initializeApp(
-       options: DefaultFirebaseOptions.currentPlatform,
-     );
-
-     runApp(const MyApp());
-   }
-
-   // ... (resto do código)
-   ```
-
----
+    *   **Para mais detalhes sobre a configuração do Firebase, consulte:** [`docs/firebase/authentication.md`](../../docs/firebase/authentication.md)
 
 ### Passo 2: Autenticação de Usuários
 
 Agora, vamos construir as telas e a lógica para que os usuários possam se cadastrar e entrar no aplicativo.
 
-**2.1. Crie a Estrutura de Pastas:**
-   - Para organizar as telas, criaremos a seguinte estrutura dentro da pasta `lib`:
-     ```
-     /lib
-     |-- screens/
-     |   `-- authentication/
-     ```
+*   **Crie a Estrutura de Pastas:** Crie `lib/screens/authentication/` e `lib/screens/`.
+*   **Crie a Tela de Splash:** Crie `lib/screens/authentication/splash_screen.dart` e configure `lib/main.dart` para usá-la.
+*   **Crie as Telas de Login e Cadastro:** Crie `lib/screens/authentication/login_screen.dart` e `lib/screens/authentication/signup_screen.dart`.
+*   **Implemente o Fluxo de Navegação:** Configure a navegação entre `SplashScreen`, `LoginScreen` e `SignupScreen`.
+*   **Implemente a Lógica de Autenticação:** Adicione validação de formulário e integração com Firebase Auth (e-mail/senha e Google Sign-In) nas telas de Login e Cadastro.
+*   **Implemente o Logout:** Adicione um botão de logout na `HomeScreen`.
 
-**2.2. Crie a Tela de Splash (Próximo Passo):**
-   - Criaremos o arquivo `lib/screens/authentication/splash_screen.dart`.
-   - Esta tela será a primeira a ser exibida, e irá verificar se o usuário já está logado ou não.
+    *   **Para mais detalhes sobre a estrutura de pastas, consulte:** [`docs/project_structure/project_structure.md`](../../docs/project_structure/project_structure.md)
+    *   **Para mais detalhes sobre StatelessWidget vs. StatefulWidget, consulte:** [`docs/flutter_basics/stateless_stateful_widgets.md`](../../docs/flutter_basics/stateless_stateful_widgets.md)
+    *   **Para mais detalhes sobre navegação, consulte:** [`docs/navigation/navigation_basics.md`](../../docs/navigation/navigation_basics.md)
+    *   **Para mais detalhes sobre validação de formulários, consulte:** [`docs/forms/form_validation.md`](../../docs/forms/form_validation.md)
+    *   **Para mais detalhes sobre programação assíncrona, consulte:** [`docs/async_programming/async_await_futures.md`](../../docs/async_programming/async_await_futures.md)
+    *   **Para mais detalhes sobre o fluxo de Login, consulte:** [`docs/login/login_flow.md`](../../docs/login/login_flow.md)
+    *   **Para mais detalhes sobre o fluxo de Cadastro, consulte:** [`docs/signup/signup_flow.md`](../../docs/signup/signup_flow.md)
+
+---
+
+## Próximos Passos
+
+Consulte o `action_plan.md` na raiz do projeto para as próximas tarefas detalhadas.

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart'; // Importação para Firebase Auth
+import 'package:users_app/screens/authentication/login_screen.dart'; // Importação para a tela de Login
 
 /// Tela Principal do Aplicativo
 ///
@@ -13,6 +15,21 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Bem-vindo!'),
         centerTitle: true,
+        actions: [
+          // Botão de Logout
+          IconButton(
+            icon: const Icon(Icons.logout), // Ícone de logout
+            onPressed: () async {
+              // Lógica para fazer logout do Firebase.
+              await FirebaseAuth.instance.signOut();
+              // Após o logout, navega para a tela de Login e remove todas as rotas anteriores.
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => const LoginScreen()),
+                (Route<dynamic> route) => false, // Remove todas as rotas anteriores
+              );
+            },
+          ),
+        ],
       ),
       body: const Center(
         child: Text(

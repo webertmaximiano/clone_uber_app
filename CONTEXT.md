@@ -14,7 +14,7 @@ Estamos desenvolvendo um ecossistema de aplicativos (usuário, motorista e paine
     *   Projeto Firebase criado (`clone-uber-app-c21a1`).
     *   CLI do FlutterFire instalada e configurada (`flutterfire configure`).
     *   Dependências essenciais do Firebase adicionadas (`firebase_core`, `firebase_auth`, `cloud_firestore`, `google_sign_in`).
-    *   Firebase inicializado em `main.dart`.
+    *   Firebase inicializado em `main.dart` e conectado ao emulador de autenticação.
 *   **Estrutura de Telas de Autenticação:**
     *   Diretórios `lib/screens/authentication/` e `lib/screens/` criados.
     *   `splash_screen.dart`, `login_screen.dart`, `signup_screen.dart` criados.
@@ -27,16 +27,27 @@ Estamos desenvolvendo um ecossistema de aplicativos (usuário, motorista e paine
     *   Cadastro de usuário com e-mail/senha (`createUserWithEmailAndPassword`) implementado em `SignupScreen`.
     *   Login de usuário com e-mail/senha (`signInWithEmailAndPassword`) implementado em `LoginScreen`.
     *   Login com Google (`signInWithGoogle`) implementado em `LoginScreen`.
+    *   Logout implementado na `HomeScreen`.
 *   **Assets:**
     *   Diretório `assets/images/` criado e configurado em `pubspec.yaml`.
     *   **PENDENTE:** O arquivo `google_logo.png` precisa ser colocado manualmente pelo usuário em `users_app/assets/images/`.
 
-## Documentação Adicional
+## Documentação Adicional (NOVA ESTRUTURA)
 
 *   `README.md` (raiz do projeto) criado e atualizado.
-*   `users_app/TUTORIAL.md` criado e atualizado com o passo a passo do `users_app`.
-*   `users_app/DICAS_FLUTTER.md` criado e atualizado com diversas dicas sobre Flutter e Firebase.
-    *   **PROBLEMA CONHECIDO:** Houve uma dificuldade persistente em adicionar a dica sobre gerenciamento de assets a este arquivo. A tarefa foi abortada para evitar um loop.
+*   `users_app/TUTORIAL.md` atualizado para apontar para a nova estrutura `docs/`.
+*   **Nova estrutura `docs/` criada e populada com conteúdo migrado:**
+    *   `docs/project_structure/project_structure.md`
+    *   `docs/flutter_basics/stateless_stateful_widgets.md`
+    *   `docs/navigation/navigation_basics.md`
+    *   `docs/development_environment/web_run.md`
+    *   `docs/forms/form_validation.md`
+    *   `docs/async_programming/async_await_futures.md`
+    *   `docs/firebase/authentication.md`
+    *   `docs/assets/asset_management.md`
+    *   `docs/login/login_flow.md`
+    *   `docs/signup/signup_flow.md`
+    *   `docs/user_stories/` (diretório criado, aguardando conteúdo)
 
 ## Próximos Passos (Gerenciados por `action_plan.md`)
 
