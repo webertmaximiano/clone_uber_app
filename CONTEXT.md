@@ -26,11 +26,17 @@ Estamos desenvolvendo um ecossistema de aplicativos (usuário, motorista e paine
     *   Validação de formulário implementada em `SignupScreen` e `LoginScreen`.
     *   Cadastro de usuário com e-mail/senha (`createUserWithEmailAndPassword`) implementado em `SignupScreen`.
     *   Login de usuário com e-mail/senha (`signInWithEmailAndPassword`) implementado em `LoginScreen`.
-    *   Login com Google (`signInWithGoogle`) implementado em `LoginScreen`.
+    *   Login com Google (`signInWithGoogle`) implementado em `LoginScreen` (com ajuste para não usar emulador na web).
     *   Logout implementado na `HomeScreen`.
+    *   Dados do usuário (nome) armazenados no Cloud Firestore após o cadastro.
 *   **Assets:**
     *   Diretório `assets/images/` criado e configurado em `pubspec.yaml`.
-    *   **PENDENTE:** O arquivo `google_logo.png` precisa ser colocado manualmente pelo usuário em `users_app/assets/images/`.
+    *   `google_logo.png` colocado manualmente pelo usuário em `users_app/assets/images/`.
+*   **Testes de Autenticação:**
+    *   Cadastro com e-mail/senha testado e funcionando.
+    *   Login com e-mail/senha testado e funcionando.
+    *   Login com Google testado e funcionando.
+    *   Redirecionamento da `SplashScreen` para `LoginScreen` ou `HomeScreen` verificado e funcionando.
 
 ## Documentação Adicional (NOVA ESTRUTURA)
 

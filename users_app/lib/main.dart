@@ -13,9 +13,11 @@ void main() async {
 
   // --- Adicione este bloco de código ---
   if (kDebugMode) {
-    // Conecta o Firebase Auth ao emulador local.
-    // 'localhost' é o host e 9099 é a porta padrão do emulador de autenticação.
-    FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+    // Conecta o Firebase Auth ao emulador local APENAS SE NÃO FOR WEB.
+    // Para web, o Google Sign-In funciona melhor com o serviço real do Firebase.
+    if (!kIsWeb) { // Adicione esta condição!
+      FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+    }
   }
   // --- Fim do bloco de código a ser adicionado ---
 

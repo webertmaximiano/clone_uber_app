@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart'; // Importação para Google Sign-In
 import 'package:users_app/screens/authentication/signup_screen.dart';
+import 'package:users_app/screens/home_screen.dart'; // Importação para a tela principal
 
 /// Tela de Login
 class LoginScreen extends StatefulWidget {
@@ -37,7 +38,13 @@ class _LoginScreenState extends State<LoginScreen> {
         const SnackBar(content: Text('Login realizado com sucesso!')),
       );
 
-      // TODO: Navegar para a tela principal do app após o login.
+      // Navega para a tela principal do app e remove todas as rotas anteriores.
+      if (mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+          (Route<dynamic> route) => false,
+        );
+      }
 
     } on FirebaseAuthException catch (e) {
       String message;
@@ -72,7 +79,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
     try {
       // 1. Inicia o fluxo de login do Google.
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      final GoogleSignInAccount? googleUser = await GoogleSignIn(
+        clientId: '810359951312-aro7r78gr95rhpd4j4ltua1ha8i36opc.apps.googleusercontent.com', // Adicione seu Client ID Web aqui
+      ).signIn();
 
       if (googleUser == null) {
         // O usuário cancelou o login.
@@ -100,7 +109,13 @@ class _LoginScreenState extends State<LoginScreen> {
         const SnackBar(content: Text('Login com Google realizado com sucesso!')),
       );
 
-      // TODO: Navegar para a tela principal do app após o login.
+      // Navega para a tela principal do app e remove todas as rotas anteriores.
+      if (mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+          (Route<dynamic> route) => false,
+        );
+      }
 
     } on FirebaseAuthException catch (e) {
       String message;

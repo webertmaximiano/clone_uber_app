@@ -30,18 +30,21 @@ class _SplashScreenState extends State<SplashScreen> {
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       // Adicionamos um pequeno atraso para que a Splash Screen seja visível.
       Timer(const Duration(seconds: 3), () {
-        if (user == null) {
-          // Se o usuário for nulo, significa que não há ninguém logado.
-          // Navega para a tela de Login.
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => const LoginScreen()),
-          );
-        } else {
-          // Se o usuário não for nulo, significa que há alguém logado.
-          // Navega para a tela principal (Home).
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => const HomeScreen()),
-          );
+        // Verifica se o widget ainda está montado antes de tentar navegar.
+        if (mounted) {
+          if (user == null) {
+            // Se o usuário for nulo, significa que não há ninguém logado.
+            // Navega para a tela de Login.
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => const LoginScreen()),
+            );
+          } else {
+            // Se o usuário não for nulo, significa que há alguém logado.
+            // Navega para a tela principal (Home).
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => const HomeScreen()),
+            );
+          }
         }
       });
     });

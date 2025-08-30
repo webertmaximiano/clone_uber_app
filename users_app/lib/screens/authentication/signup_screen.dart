@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:users_app/screens/home_screen.dart'; // Importação para a tela principal
 
 /// Tela de Cadastro
 ///
@@ -57,9 +58,13 @@ class _SignupScreenState extends State<SignupScreen> {
         const SnackBar(content: Text('Cadastro realizado com sucesso!')),
       );
 
-      // Após o sucesso, podemos navegar para a próxima tela (ex: tela principal)
-      // ou voltar para a tela de login. Por enquanto, vamos apenas voltar.
-      if (mounted) Navigator.of(context).pop();
+      // Navega para a tela principal do app e remove todas as rotas anteriores.
+      if (mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+          (Route<dynamic> route) => false,
+        );
+      }
 
     } on FirebaseAuthException catch (e) {
       // O bloco `on` captura exceções de um tipo específico. Aqui, pegamos
