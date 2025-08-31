@@ -31,7 +31,7 @@ Estamos desenvolvendo um ecossistema de aplicativos (usuário, motorista e paine
     *   Integração do `LocationService` com a `HomeScreen` para centrar o mapa e adicionar um marcador na localização do usuário.
     *   Tratamento de erros para permissões de localização negadas.
 
-### Fase 3: Gerenciamento de Corridas e Motoristas (Próxima Fase)
+### Fase 3: Gerenciamento de Corridas e Motoristas (App do Usuário)
 
 *   **Objetivo:** Implementar a funcionalidade principal de solicitação de corridas, exibição de motoristas no mapa e gerenciamento de estados de corrida.
 *   **Foco:**
@@ -39,6 +39,10 @@ Estamos desenvolvendo um ecossistema de aplicativos (usuário, motorista e paine
     *   **Solicitação de Corrida:** Permitir que o usuário solicite uma corrida, definindo origem e destino.
     *   **Comunicação em Tempo Real:** Utilizar o Cloud Firestore para atualizações de localização de motoristas e estados de corrida.
     *   **UI de Solicitação:** Desenvolver a interface para o usuário interagir com o processo de solicitação de corrida.
+
+### Fase 4: App do Motorista (Próxima Fase)
+
+*   **Objetivo:** Desenvolver o aplicativo dedicado para motoristas, permitindo que eles aceitem corridas, naveguem e atualizem seu status.
 
 ## Próximos Passos (Gerenciados por `action_plan.md`)
 

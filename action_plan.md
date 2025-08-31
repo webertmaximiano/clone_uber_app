@@ -1,6 +1,6 @@
-# Plano de Ação - Fase 3: Gerenciamento de Corridas e Motoristas
+# Plano de Ação - Fase 3: Gerenciamento de Corridas e Motoristas (App do Usuário)
 
-O objetivo desta fase é implementar a funcionalidade principal de solicitação de corridas, exibição de motoristas no mapa e gerenciamento de estados de corrida.
+O objetivo desta fase é implementar a funcionalidade principal de solicitação de corridas, exibição de motoristas no mapa e gerenciamento de estados de corrida para o aplicativo do usuário.
 
 ## Checklist da Fase 3:
 
@@ -30,3 +30,7 @@ O objetivo desta fase é implementar a funcionalidade principal de solicitação
 - [ ] **Refatoração e Limpeza:**
   - [ ] Garantir que os novos serviços (`DriverService`, `RideService`) estejam bem separados.
   - [ ] Adicionar tratamento de erros robusto para operações do Firestore e de rede.
+
+- [ ] **Melhorias e Otimizações (Pós-Fase 3):**
+  - [ ] **[TAREFA PENDENTE]** Atualizar `google_maps_flutter` para usar `AdvancedMarkerElement` e resolver o aviso de depreciação do `Marker`.
+  - [ ] Otimizar o carregamento da API JavaScript do Google Maps no `index.html` com `loading=async`.
