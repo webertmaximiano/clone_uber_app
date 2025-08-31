@@ -1,37 +1,32 @@
-# Plano de Ação - Fase 2: Mapa e Localização
+# Plano de Ação - Fase 3: Gerenciamento de Corridas e Motoristas
 
-O objetivo desta fase é implementar o mapa e a funcionalidade de localização do usuário, que são o coração do aplicativo.
+O objetivo desta fase é implementar a funcionalidade principal de solicitação de corridas, exibição de motoristas no mapa e gerenciamento de estados de corrida.
 
-## Checklist da Fase 2:
+## Checklist da Fase 3:
 
-- [ ] **Adicionar Dependências de Mapa e Localização:**
-  - [ ] Adicionar `google_maps_flutter` ao `pubspec.yaml`.
-  - [ ] Adicionar `geolocator` ao `pubspec.yaml`.
-  - [ ] Executar `flutter pub get`.
+- [ ] **Configuração do Firestore:**
+  - [ ] Revisar e configurar as regras de segurança do Firestore para permitir leitura/escrita de dados de localização e corrida.
+  - [ ] Criar coleções iniciais no Firestore (ex: `drivers`, `rides`).
 
-- [ ] **Configurar a Plataforma Android:**
-  - [ ] Obter a chave da API do Google Maps no Google Cloud Console.
-  - [ ] Adicionar a chave da API ao `android/app/src/main/AndroidManifest.xml`.
-  - [ ] Garantir que as permissões de localização (`ACCESS_FINE_LOCATION`) estão no `AndroidManifest.xml`.
+- [ ] **Exibição de Motoristas no Mapa:**
+  - [ ] Criar um `DriverService` para gerenciar a obtenção de dados de motoristas do Firestore.
+  - [ ] Implementar a escuta em tempo real de motoristas próximos no Firestore.
+  - [ ] Adicionar marcadores para motoristas no mapa, atualizando suas posições em tempo real.
 
-- [ ] **Configurar a Plataforma iOS:**
-  - [ ] Adicionar a chave da API do Google Maps ao `ios/Runner/AppDelegate.swift`.
-  - [ ] Adicionar as chaves de permissão de localização (`NSLocationWhenInUseUsageDescription`) ao `ios/Runner/Info.plist`.
+- [ ] **UI de Solicitação de Corrida:**
+  - [ ] Adicionar campos de entrada para origem e destino na `HomeScreen` ou em uma nova tela.
+  - [ ] Integrar a API de Geocoding (se não estiver já no `LocationService`) para converter endereços em coordenadas.
+  - [ ] Adicionar um botão para "Solicitar Corrida".
 
-- [ ] **Implementar a Tela do Mapa:**
-  - [ ] Substituir o `Scaffold` atual da `HomeScreen` por um widget `GoogleMap`.
-  - [ ] Definir uma posição inicial padrão para a câmera do mapa.
+- [ ] **Lógica de Solicitação de Corrida:**
+  - [ ] Criar um `RideService` para gerenciar a criação e o estado das corridas no Firestore.
+  - [ ] Implementar a lógica para criar um novo documento de corrida no Firestore com origem, destino, usuário e status.
+  - [ ] Implementar a escuta em tempo real do status da corrida para o usuário.
 
-- [ ] **Implementar o Serviço de Localização:**
-  - [ ] Criar uma classe `LocationService` para encapsular a lógica do `geolocator`.
-  - [ ] Implementar um método para verificar e solicitar permissão de localização.
-  - [ ] Implementar um método para obter a localização atual do usuário (`Position`).
+- [ ] **Integração com a UI:**
+  - [ ] Atualizar a `HomeScreen` para exibir a UI de solicitação de corrida.
+  - [ ] Atualizar a UI com base no status da corrida (ex: "Procurando motorista", "Motorista a caminho").
 
-- [ ] **Integrar Mapa e Localização:**
-  - [ ] Na `HomeScreen`, ao inicializar, chamar o `LocationService` para obter a localização do usuário.
-  - [ ] Animar a câmera do `GoogleMap` para a posição atual do usuário.
-  - [ ] Adicionar um marcador (`Marker`) no mapa para indicar a localização do usuário.
-
-- [ ] **Refatorar e Limpar:**
-  - [ ] Garantir que a lógica de UI e a lógica de negócio (serviços) estão bem separadas.
-  - [ ] Adicionar tratamento de erros para casos em que a permissão de localização é negada.
+- [ ] **Refatoração e Limpeza:**
+  - [ ] Garantir que os novos serviços (`DriverService`, `RideService`) estejam bem separados.
+  - [ ] Adicionar tratamento de erros robusto para operações do Firestore e de rede.

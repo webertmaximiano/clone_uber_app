@@ -1,4 +1,4 @@
-# Context the Project: Clone Uber com Flutter e Firebase
+# Contexto do Projeto: Clone Uber com Flutter e Firebase
 
 Este arquivo reflete o estado atual do nosso projeto e o progresso no tutorial.
 
@@ -8,49 +8,38 @@ Estamos desenvolvendo um ecossistema de aplicativos (usuário, motorista e paine
 
 ## Progresso do `users_app` (Aplicativo do Usuário)
 
-### Fase 1: Configuração e Autenticação (REVISADA)
+### Fase 1: Configuração e Autenticação (Concluída)
 
-*   **Configuração Inicial do Firebase:**
-    *   Projeto Firebase criado (`clone-uber-app-c21a1`).
-    *   CLI do FlutterFire instalada e configurada (`flutterfire configure`).
-    *   Dependências essenciais do Firebase adicionadas (`firebase_core`, `firebase_auth`, `cloud_firestore`).
-    *   Firebase inicializado em `main.dart`.
-*   **Estrutura de Telas de Autenticação:**
-    *   Diretórios `lib/screens/authentication/` e `lib/screens/` criados.
-    *   `splash_screen.dart`, `login_screen.dart`, `signup_screen.dart`, `home_screen.dart` criados.
-*   **Fluxo de Navegação:**
-    *   `SplashScreen` redireciona corretamente com base no estado de autenticação.
-    *   Navegação entre `LoginScreen` e `SignupScreen` implementada.
-    *   Redirecionamento para `HomeScreen` após login/cadastro.
-*   **Lógica de Autenticação (Refatorada):**
-    *   **Removida a dependência `google_sign_in`**. O fluxo de autenticação com Google agora é gerenciado diretamente pelo `firebase_auth`.
-    *   **Criado o `AuthService` (`lib/services/auth_service.dart`):** Uma classe dedicada para centralizar e gerenciar toda a lógica de autenticação.
-    *   **Lógica Multiplataforma:** O `AuthService` usa `signInWithPopup` para a web e `signInWithProvider` para mobile, fornecendo uma experiência de login otimizada para cada plataforma.
-    *   A `LoginScreen` foi simplificada para chamar o `AuthService`, separando a UI da lógica de negócio.
-    *   Login com e-mail/senha e cadastro continuam funcionando como antes.
-*   **Assets:**
-    *   `google_logo.png` mantido para uso no botão de login.
-*   **Testes de Autenticação:**
-    *   A lógica de negócio no `AuthService` foi desenvolvida e validada usando Test-Driven Development (TDD), embora os testes tenham sido removidos após a conclusão para manter o projeto limpo.
+*   **Objetivo:** Configurar o projeto Firebase e implementar o fluxo de autenticação de usuários.
+*   **Conquistas:**
+    *   Configuração inicial do Firebase e dependências essenciais.
+    *   Estrutura de telas de autenticação (`splash`, `login`, `signup`).
+    *   Fluxo de navegação entre telas de autenticação e `HomeScreen`.
+    *   Lógica de autenticação com e-mail/senha e Google (refatorada para usar `AuthService` com `signInWithPopup` para web e `signInWithProvider` para mobile).
+    *   Remoção da dependência `google_sign_in`.
+    *   Documentação atualizada para refletir a nova arquitetura de autenticação.
+    *   **Segurança:** Chaves de API do Google Cloud (Firebase Web e Google Maps) devidamente restritas.
 
-## Documentação Adicional (NOVA ESTRUTURA)
+### Fase 2: Mapa e Localização (Concluída)
 
-*   `README.md` (raiz do projeto) criado e atualizado.
-*   `users_app/TUTORIAL.md` atualizado para apontar para a nova estrutura `docs/`.
-*   **Nova estrutura `docs/` criada e populada com conteúdo migrado:**
-    *   `docs/project_structure/project_structure.md`
-    *   `docs/flutter_basics/stateless_stateful_widgets.md`
-    *   `docs/navigation/navigation_basics.md`
-    *   `docs/development_environment/web_run.md`
-    *   `docs/forms/form_validation.md`
-    *   `docs/async_programming/async_await_futures.md`
-    *   `docs/firebase/authentication.md`
-    *   `docs/assets/asset_management.md`
-    *   `docs/login/login_flow.md`
-    *   `docs/signup/signup_flow.md`
-    *   `docs/user_stories/` (diretório criado, aguardando conteúdo)
-    *   `docs/development_environment/platform_specific_code.md` (Novo: Documentação sobre código específico de plataforma com `kIsWeb`).
+*   **Objetivo:** Integrar o Google Maps e obter a localização do usuário.
+*   **Conquistas:**
+    *   Adição das dependências `google_maps_flutter` e `geolocator`.
+    *   Configuração das chaves de API do Google Maps para Android e Web (`AndroidManifest.xml` e `index.html`).
+    *   Implementação da `HomeScreen` com um mapa interativo.
+    *   Criação do `LocationService` para gerenciar permissões e obter a localização atual.
+    *   Integração do `LocationService` com a `HomeScreen` para centrar o mapa e adicionar um marcador na localização do usuário.
+    *   Tratamento de erros para permissões de localização negadas.
+
+### Fase 3: Gerenciamento de Corridas e Motoristas (Próxima Fase)
+
+*   **Objetivo:** Implementar a funcionalidade principal de solicitação de corridas, exibição de motoristas no mapa e gerenciamento de estados de corrida.
+*   **Foco:**
+    *   **Exibição de Motoristas:** Mostrar a localização de motoristas próximos no mapa em tempo real.
+    *   **Solicitação de Corrida:** Permitir que o usuário solicite uma corrida, definindo origem e destino.
+    *   **Comunicação em Tempo Real:** Utilizar o Cloud Firestore para atualizações de localização de motoristas e estados de corrida.
+    *   **UI de Solicitação:** Desenvolver a interface para o usuário interagir com o processo de solicitação de corrida.
 
 ## Próximos Passos (Gerenciados por `action_plan.md`)
 
-A partir de agora, as tarefas detalhadas serão gerenciadas no `action_plan.md`.
+As tarefas detalhadas para a Fase 3 serão gerenciadas no `action_plan.md`.

@@ -10,6 +10,8 @@
 Este é o plano de ensino de alto nível. O desenvolvimento de cada aplicativo é detalhado nos arquivos `TUTORIAL.md` específicos de cada projeto.
 
 1.  **App do Usuário (`users_app`):** Para solicitar corridas.
+    *   **Fase 1: Configuração e Autenticação (Concluída)**
+    *   **Fase 2: Mapa e Localização (Concluída)**
 2.  **App do Motorista (`drivers_app`):** Para aceitar e realizar corridas.
 3.  **Painel Admin (`Web`):** Para gerenciar o sistema.
 
