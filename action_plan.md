@@ -1,45 +1,37 @@
-# Plano de Ação do Projeto Clone Uber
+# Plano de Ação - Fase 2: Mapa e Localização
 
-Este documento serve como um checklist detalhado das tarefas a serem executadas. Cada item será marcado como concluído (`[x]`) à medida que avançamos.
+O objetivo desta fase é implementar o mapa e a funcionalidade de localização do usuário, que são o coração do aplicativo.
 
-## Tarefa Principal: Finalizar o Fluxo de Autenticação e Configuração Inicial
+## Checklist da Fase 2:
 
-### Checklist:
+- [ ] **Adicionar Dependências de Mapa e Localização:**
+  - [ ] Adicionar `google_maps_flutter` ao `pubspec.yaml`.
+  - [ ] Adicionar `geolocator` ao `pubspec.yaml`.
+  - [ ] Executar `flutter pub get`.
 
-- [x] **Configurar Repositório GitHub:**
-    - [x] Adicionar o remote `git@github.com:webertmaximiano/clone_uber_app.git`.
-    - [x] Fazer o push inicial do código para o GitHub.
-- [x] **Documentação:**
-    - [x] Criar diretórios `docs/`.
-    - [x] Migrar conteúdo de `users_app/DICAS_FLUTTER.md` para `docs/`.
-    - [x] Migrar explicações de código de `login_screen.dart` para `docs/login/login_flow.md`.
-    - [x] Migrar explicações de código de `signup_screen.dart` para `docs/signup/signup_flow.md`.
-    - [x] Atualizar `users_app/TUTORIAL.md` para apontar para a nova estrutura `docs/`.
-    - [x] Excluir `users_app/DICAS_FLUTTER.md`.
-- [x] **Google Sign-In - Ação do Usuário:**
-    - [x] Colocar o arquivo `google_logo.png` no diretório `users_app/assets/images/`.
-- [x] **Testar o Fluxo de Autenticação:**
-    - [x] Testar o cadastro com e-mail/senha.
-    - [x] Testar o login com e-mail/senha.
-    - [x] Testar o login com Google.
-    - [x] Verificar o redirecionamento da `SplashScreen` para `LoginScreen` ou `HomeScreen`.
-- [x] **Implementar Logout:**
-    - [x] Adicionar um botão de logout na `HomeScreen`.
-    - [x] Implementar a lógica de logout usando `FirebaseAuth.instance.signOut()`.
-- [x] **Navegação Pós-Autenticação:**
-    - [x] Redirecionar para `HomeScreen` após login/cadastro bem-sucedido.
-- [x] **Armazenar Dados do Usuário (Firestore):**
-    - [x] Após o cadastro, salvar informações adicionais do usuário (ex: nome) no Cloud Firestore.
-- [x] **Corrigir erro de widget desmontado na SplashScreen:**
-    - [x] Adicionar `if (mounted)` check antes da navegação.
-- [x] **Corrigir meta tag deprecated em `index.html`:**
-    - [x] Substituir `<meta name="apple-mobile-web-app-capable" content="yes">` por `<meta name="mobile-web-app-capable" content="yes">`.
-- [x] **Corrigir erro 'ClientID not set' no Google Sign-In Web:**
-    - [x] Passar `clientId` para o construtor `GoogleSignIn()`.
-- [x] **Ajustar Google Sign-In para não usar emulador na Web:**
-    - [x] Adicionar `if (!kIsWeb)` na conexão do emulador de autenticação no `main.dart`.
-- [ ] **Configuração iOS para Google Sign-In (Opcional/Futuro):**
-    - [ ] Configurar o `REVERSED_CLIENT_ID` no Xcode.
-- [ ] **Implementar Redefinição de Senha (Opcional/Futuro):**
-    - [ ] Adicionar funcionalidade de "Esqueceu a senha?" na `LoginScreen`.
-    - [ ] Implementar `FirebaseAuth.instance.sendPasswordResetEmail()`.
+- [ ] **Configurar a Plataforma Android:**
+  - [ ] Obter a chave da API do Google Maps no Google Cloud Console.
+  - [ ] Adicionar a chave da API ao `android/app/src/main/AndroidManifest.xml`.
+  - [ ] Garantir que as permissões de localização (`ACCESS_FINE_LOCATION`) estão no `AndroidManifest.xml`.
+
+- [ ] **Configurar a Plataforma iOS:**
+  - [ ] Adicionar a chave da API do Google Maps ao `ios/Runner/AppDelegate.swift`.
+  - [ ] Adicionar as chaves de permissão de localização (`NSLocationWhenInUseUsageDescription`) ao `ios/Runner/Info.plist`.
+
+- [ ] **Implementar a Tela do Mapa:**
+  - [ ] Substituir o `Scaffold` atual da `HomeScreen` por um widget `GoogleMap`.
+  - [ ] Definir uma posição inicial padrão para a câmera do mapa.
+
+- [ ] **Implementar o Serviço de Localização:**
+  - [ ] Criar uma classe `LocationService` para encapsular a lógica do `geolocator`.
+  - [ ] Implementar um método para verificar e solicitar permissão de localização.
+  - [ ] Implementar um método para obter a localização atual do usuário (`Position`).
+
+- [ ] **Integrar Mapa e Localização:**
+  - [ ] Na `HomeScreen`, ao inicializar, chamar o `LocationService` para obter a localização do usuário.
+  - [ ] Animar a câmera do `GoogleMap` para a posição atual do usuário.
+  - [ ] Adicionar um marcador (`Marker`) no mapa para indicar a localização do usuário.
+
+- [ ] **Refatorar e Limpar:**
+  - [ ] Garantir que a lógica de UI e a lógica de negócio (serviços) estão bem separadas.
+  - [ ] Adicionar tratamento de erros para casos em que a permissão de localização é negada.

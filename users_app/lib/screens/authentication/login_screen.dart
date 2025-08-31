@@ -1,10 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart'; // Importação para Google Sign-In
+import 'package:flutter/material.dart';
+import 'package:users_app/screens/home_screen.dart';
 import 'package:users_app/screens/authentication/signup_screen.dart';
-import 'package:users_app/screens/home_screen.dart'; // Importação para a tela principal
+import 'package:users_app/services/auth_service.dart'; // Importando nosso serviço
 
-/// Tela de Login
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -13,12 +12,57 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  // [1] CONTROLADORES E CHAVES DO FORMULÁRIO
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  
+  // [2] VARIÁVEL DE ESTADO PARA O LOADING
   bool _isLoading = false;
 
-  /// Método para submeter o formulário de login com e-mail e senha.
+  // [3] INSTÂNCIA DO NOSSO AUTHSERVICE
+  final AuthService _authService = AuthService();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+  
+  void _showSnackBar(String message) {
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message)),
+      );
+    }
+  }
+
+  // [4] LÓGICA DE LOGIN COM GOOGLE (SIMPLIFICADA)
+  Future<void> _signInWithGoogle() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    final User? user = await _authService.signInWithGoogle();
+
+    if (mounted) {
+      setState(() {
+        _isLoading = false;
+      });
+
+      if (user != null) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+          (Route<dynamic> route) => false,
+        );
+      } else {
+        _showSnackBar("Login com Google cancelado ou falhou.");
+      }
+    }
+  }
+  
+  // [5] LÓGICA DE LOGIN COM E-MAIL E SENHA
   Future<void> _submitForm() async {
     if (!_formKey.currentState!.validate()) {
       return;
@@ -29,16 +73,13 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     try {
+      // Usando o FirebaseAuth diretamente aqui, o que é aceitável para uma lógica simples.
+      // Para lógicas mais complexas, poderíamos mover isso para o AuthService também.
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Login realizado com sucesso!')),
-      );
-
-      // Navega para a tela principal do app e remove todas as rotas anteriores.
       if (mounted) {
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => const HomeScreen()),
@@ -48,100 +89,24 @@ class _LoginScreenState extends State<LoginScreen> {
 
     } on FirebaseAuthException catch (e) {
       String message;
-      if (e.code == 'user-not-found') {
-        message = 'Nenhum usuário encontrado para este e-mail.';
-      } else if (e.code == 'wrong-password') {
-        message = 'Senha incorreta.';
+      if (e.code == 'user-not-found' || e.code == 'wrong-password' || e.code == 'invalid-credential') {
+        message = 'E-mail ou senha incorretos.';
       } else {
         message = 'Ocorreu um erro de autenticação.';
       }
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message), backgroundColor: Colors.red),
-      );
+      _showSnackBar(message);
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Ocorreu um erro inesperado.'), backgroundColor: Colors.red),
-      );
-    }
-
-    if (mounted) {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-
-  /// Método para realizar o login com o Google.
-  Future<void> _signInWithGoogle() async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      // 1. Inicia o fluxo de login do Google.
-      final GoogleSignInAccount? googleUser = await GoogleSignIn(
-        clientId: '810359951312-aro7r78gr95rhpd4j4ltua1ha8i36opc.apps.googleusercontent.com', // Adicione seu Client ID Web aqui
-      ).signIn();
-
-      if (googleUser == null) {
-        // O usuário cancelou o login.
-        if (mounted) {
-          setState(() {
-            _isLoading = false;
-          });
-        }
-        return;
-      }
-
-      // 2. Obtém os detalhes de autenticação do Google.
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-
-      // 3. Cria uma credencial do Firebase com as credenciais do Google.
-      final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-
-      // 4. Autentica o usuário no Firebase com a credencial do Google.
-      await FirebaseAuth.instance.signInWithCredential(credential);
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Login com Google realizado com sucesso!')),
-      );
-
-      // Navega para a tela principal do app e remove todas as rotas anteriores.
+      _showSnackBar('Ocorreu um erro inesperado: $e');
+    } finally {
       if (mounted) {
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
-          (Route<dynamic> route) => false,
-        );
+        setState(() {
+          _isLoading = false;
+        });
       }
-
-    } on FirebaseAuthException catch (e) {
-      String message;
-      if (e.code == 'account-exists-with-different-credential') {
-        message = 'Uma conta já existe com o mesmo e-mail, mas com credenciais diferentes.';
-      } else if (e.code == 'invalid-credential') {
-        message = 'A credencial do Google é inválida ou expirou.';
-      } else {
-        message = 'Ocorreu um erro ao fazer login com o Google.';
-      }
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message), backgroundColor: Colors.red),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Ocorreu um erro inesperado ao fazer login com o Google.'), backgroundColor: Colors.red),
-      );
-    }
-
-    if (mounted) {
-      setState(() {
-        _isLoading = false;
-      });
     }
   }
 
+  // [6] MÉTODO BUILD
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -202,19 +167,18 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: const Text('Entrar', style: TextStyle(fontSize: 18)),
                           ),
                           const SizedBox(height: 10),
-                          // Botão para login com Google
                           ElevatedButton.icon(
                             onPressed: _signInWithGoogle,
                             icon: Image.asset(
-                              'assets/images/google_logo.png', // Você precisará adicionar esta imagem
+                              'assets/images/google_logo.png',
                               height: 24.0,
                             ),
                             label: const Text('Entrar com Google', style: TextStyle(fontSize: 18)),
                             style: ElevatedButton.styleFrom(
                               minimumSize: const Size(double.infinity, 50),
-                              backgroundColor: Colors.white, // Fundo branco
-                              foregroundColor: Colors.black, // Texto preto
-                              side: const BorderSide(color: Colors.grey), // Borda cinza
+                              backgroundColor: Colors.white,
+                              foregroundColor: Colors.black,
+                              side: const BorderSide(color: Colors.grey),
                             ),
                           ),
                         ],
