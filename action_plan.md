@@ -4,19 +4,32 @@ O objetivo desta fase é implementar a funcionalidade principal de solicitação
 
 ## Checklist da Fase 3:
 
-- [ ] **Configuração do Firestore:**
-  - [ ] Revisar e configurar as regras de segurança do Firestore para permitir leitura/escrita de dados de localização e corrida.
-  - [ ] Criar coleções iniciais no Firestore (ex: `drivers`, `rides`).
+- [x] **Configuração do Firestore:**
+  - [x] Revisar e configurar as regras de segurança do Firestore para permitir leitura/escrita de dados de localização e corrida.
+  - [x] Criar coleções iniciais no Firestore (ex: `drivers`, `rides`).
 
-- [ ] **Exibição de Motoristas no Mapa:**
-  - [ ] Criar um `DriverService` para gerenciar a obtenção de dados de motoristas do Firestore.
-  - [ ] Implementar a escuta em tempo real de motoristas próximos no Firestore.
-  - [ ] Adicionar marcadores para motoristas no mapa, atualizando suas posições em tempo real.
+- [x] **Melhorias e Otimizações:**
+  - [x] **[CONCLUÍDO]** Atualizar `google_maps_flutter` para usar `AdvancedMarkerElement` e resolver o aviso de depreciação do `Marker`.
+  - [x] Otimizar o carregamento da API JavaScript do Google Maps no `index.html` com `loading=async`.
+
+- [x] **Exibição de Motoristas no Mapa:**
+  - [x] Criar um `DriverService` para gerenciar a obtenção de dados de motoristas do Firestore.
+  - [x] Implementar a escuta em tempo real de motoristas próximos no Firestore.
+  - [x] **Integração do `StreamBuilder` na `HomeScreen`:**
+    - [x] Importar e instanciar o `DriverService` na `HomeScreen`.
+    - [x] Envolver o `GoogleMap` com um widget `StreamBuilder`.
+    - [x] Conectar o `stream` do `StreamBuilder` ao `driverService.getDriversStream()`.
+  - [x] **Processamento e Exibição dos Marcadores:**
+    - [x] No `builder` do `StreamBuilder`, iterar sobre os documentos de motoristas recebidos.
+    - [x] Para cada motorista, extrair os dados de localização (latitude, longitude).
+    - [x] Criar um `Marker` customizado para cada motorista.
+    - [x] Atualizar o conjunto de marcadores (`_markers`) e redesenhar o mapa.
 
 - [ ] **UI de Solicitação de Corrida:**
   - [ ] Adicionar campos de entrada para origem e destino na `HomeScreen` ou em uma nova tela.
   - [ ] Integrar a API de Geocoding (se não estiver já no `LocationService`) para converter endereços em coordenadas.
   - [ ] Adicionar um botão para "Solicitar Corrida".
+  - [ ] Implementar autocompletar para campos de endereço (Google Places API).
 
 - [ ] **Lógica de Solicitação de Corrida:**
   - [ ] Criar um `RideService` para gerenciar a criação e o estado das corridas no Firestore.
@@ -30,7 +43,3 @@ O objetivo desta fase é implementar a funcionalidade principal de solicitação
 - [ ] **Refatoração e Limpeza:**
   - [ ] Garantir que os novos serviços (`DriverService`, `RideService`) estejam bem separados.
   - [ ] Adicionar tratamento de erros robusto para operações do Firestore e de rede.
-
-- [ ] **Melhorias e Otimizações (Pós-Fase 3):**
-  - [ ] **[TAREFA PENDENTE]** Atualizar `google_maps_flutter` para usar `AdvancedMarkerElement` e resolver o aviso de depreciação do `Marker`.
-  - [ ] Otimizar o carregamento da API JavaScript do Google Maps no `index.html` com `loading=async`.

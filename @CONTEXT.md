@@ -39,6 +39,16 @@ Estamos desenvolvendo um ecossistema de aplicativos (usuário, motorista e paine
     *   **Solicitação de Corrida:** Permitir que o usuário solicite uma corrida, definindo origem e destino.
     *   **Comunicação em Tempo Real:** Utilizar o Cloud Firestore para atualizações de localização de motoristas e estados de corrida.
     *   **UI de Solicitação:** Desenvolver a interface para o usuário interagir com o processo de solicitação de corrida.
+    *   **Autocompletar de Endereços:** Implementar busca com autocompletar para campos de origem/destino.
+*   **Conquistas:**
+    *   **Documentação:** Criado 'docs/firebase/firestore_data_model.md' explicando o modelo de dados do Firestore.
+    *   **UI de Solicitação de Corrida:** Adicionados campos de entrada para origem e destino na `HomeScreen`.
+    *   **Geocoding:** Integrada a API de Geocoding para converter endereços em coordenadas.
+    *   **Autocompletar de Endereços:** Implementada a funcionalidade de autocompletar para campos de origem/destino usando a API do Google Places.
+    *   **Serviço de Corrida:** Criado o `RideService` e implementada a lógica inicial para criar novas solicitações de corrida no Firestore.
+    *   **Escuta de Status de Corrida:** Implementada a escuta em tempo real do status da corrida no Firestore para o usuário.
+    *   **Integração da UI de Solicitação:** Atualizada a `HomeScreen` para exibir diferentes UIs com base no status da solicitação de corrida (inicial, solicitando, etc.).
+    *   **Separação de Serviços:** Garantido que `DriverService` e `RideService` estão bem separados, seguindo o princípio de responsabilidade única.
 
 ### Fase 4: App do Motorista (Próxima Fase)
 

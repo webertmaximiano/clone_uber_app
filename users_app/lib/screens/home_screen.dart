@@ -1,9 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:users_app/screens/authentication/login_screen.dart';
 import 'package:geolocator/geolocator.dart'; // Import para o Geolocator
 import 'package:users_app/services/location_service.dart'; // Import para o nosso LocationService
+import 'package:users_app/services/driver_service.dart'; // Import para o nosso DriverService
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,7 +18,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   GoogleMapController? _controller;
   final LocationService _locationService = LocationService();
-  Set<Marker> _markers = {};
+  final DriverService _driverService = DriverService();
+  final Set<Marker> _userMarker = {}; // Marcador do usuário separado
 
   // Posição inicial da câmera do mapa (fallback).
   static const CameraPosition _kGooglePlex = CameraPosition(
@@ -32,6 +36,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _getCurrentLocation() async {
     final position = await _locationService.getCurrentLocation();
     if (position != null) {
+      // DEBUG: Imprime a localização recebida
+      if (kDebugMode) {
+        print('Location received: Lat: ${position.latitude}, Lng: ${position.longitude}');
+      }
+
       final newPosition = LatLng(position.latitude, position.longitude);
       // Adicionado um null-check para _controller
       if (_controller != null) {
@@ -39,8 +48,8 @@ class _HomeScreenState extends State<HomeScreen> {
       }
 
       setState(() {
-        _markers.clear();
-        _markers.add(Marker(
+        _userMarker.clear();
+        _userMarker.add(Marker(
           markerId: const MarkerId('currentLocation'),
           position: newPosition,
           infoWindow: const InfoWindow(title: 'Sua Localização'),
@@ -75,16 +84,53 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: GoogleMap(
-        initialCameraPosition: _kGooglePlex,
-        mapType: MapType.normal,
-        myLocationEnabled: true,
-        zoomControlsEnabled: true,
-        onMapCreated: (GoogleMapController controller) {
-          _controller = controller;
-          _getCurrentLocation(); // Chamado aqui
+      body: StreamBuilder<QuerySnapshot>(
+        stream: _driverService.getDriversStream(),
+        builder: (context, snapshot) {
+          // Começamos com o marcador do usuário e adicionamos os dos motoristas.
+          final Set<Marker> allMarkers = Set.from(_userMarker);
+
+          if (snapshot.hasData) {
+            for (var doc in snapshot.data!.docs) {
+              var data = doc.data() as Map<String, dynamic>;
+              // Validação simples para garantir que os dados de localização existem
+              if (data.containsKey('latitude') && data.containsKey('longitude')) {
+                var lat = data['latitude'];
+                var lng = data['longitude'];
+
+                // Garante que lat e lng são double
+                final double latitude = (lat is int) ? lat.toDouble() : lat;
+                final double longitude = (lng is int) ? lng.toDouble() : lng;
+
+                // DEBUG: Imprime os dados do motorista que está sendo processado
+                if (kDebugMode) {
+                  print('Processing driver: ${doc.id}, Lat: $latitude, Lng: $longitude');
+                }
+
+                allMarkers.add(
+                  Marker(
+                    markerId: MarkerId(doc.id),
+                    position: LatLng(latitude, longitude),
+                    infoWindow: InfoWindow(title: data['name'] ?? 'Motorista'),
+                    icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+                  ),
+                );
+              }
+            }
+          }
+
+          return GoogleMap(
+            initialCameraPosition: _kGooglePlex,
+            mapType: MapType.normal,
+            myLocationEnabled: true,
+            zoomControlsEnabled: true,
+            onMapCreated: (GoogleMapController controller) {
+              _controller = controller;
+              _getCurrentLocation();
+            },
+            markers: allMarkers,
+          );
         },
-        markers: _markers,
       ),
     );
   }
