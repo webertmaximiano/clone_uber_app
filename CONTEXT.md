@@ -1,6 +1,132 @@
 # Context the Project: Clone Uber com Flutter e Firebase
 
-Este arquivo reflete o estado atual do nosso projeto e o progresso no tutorial.
+I. O Que Vamos Produzir (O Produto Final)
+O nosso objetivo é criar uma Aplicação Flutter para o Passageiro com os seguintes módulos principais:
+
+Módulo de Autenticação:
+
+Ecrã de boas-vindas com opções de login/registo.
+
+Fluxo de registo com E-mail e Senha.
+
+Fluxo de login com E-mail e Senha.
+
+Integração com "Sign in with Google" para um login rápido e fácil.
+
+Gestão de perfil do utilizador (nome, foto, etc.).
+
+Módulo Principal / Mapa:
+
+Ecrã principal com um mapa interativo.
+
+Visualização da localização atual do utilizador em tempo real (ponto de origem).
+
+Campo de pesquisa para o destino.
+
+Funcionalidade de "autocomplete" na busca de destinos, que sugere lugares à medida que o utilizador digita.
+
+Desenho da rota no mapa entre a origem e o destino.
+
+Módulo de Pedido e Cálculo da Corrida:
+
+Estimação do preço e da duração da viagem com base na rota.
+
+Seleção do método de pagamento.
+
+Botão para confirmar o pedido da corrida.
+
+Módulo de Pagamento:
+
+Sistema de "carteira" ou créditos dentro da app.
+
+Integração com o Mercado Pago para adicionar créditos à carteira usando cartão de crédito.
+
+Lógica para fazer a pré-autorização do pagamento no momento do pedido.
+
+Módulo de Acompanhamento da Corrida:
+
+Ecrã de espera enquanto procura um motorista.
+
+Lógica para lidar com o aceite do motorista.
+
+Lógica de cancelamento da corrida pelo passageiro, com estorno do valor pré-autorizado.
+
+II. O Que Vamos Precisar (Recursos e Ferramentas)
+Tecnologias Base:
+
+Flutter & Dart: Para construir a aplicação para Android e iOS com uma única base de código.
+
+Visual Studio Code: O nosso ambiente de desenvolvimento.
+
+Git & GitHub: Para controlo de versão do nosso código.
+
+Backend (A "Nuvem"):
+
+Uma aplicação como esta precisa obrigatoriamente de um backend. Ele será o cérebro que guarda os dados dos utilizadores, informações das corridas, etc.
+
+Recomendação forte: Firebase (da Google). É perfeito para começar, pois oferece:
+
+Firebase Authentication: Para cuidar de todo o login (e-mail/senha e Google) de forma segura.
+
+Cloud Firestore: Uma base de dados em tempo real para guardar informações de utilizadores e corridas.
+
+Cloud Functions: Para executar lógica segura no servidor (ex: calcular o preço da corrida, processar pagamentos).
+
+Pacotes Flutter Essenciais (Plugins):
+
+Maps_flutter: Para exibir os mapas.
+
+geolocator ou location: Para obter a localização GPS do utilizador.
+
+firebase_core, firebase_auth, cloud_firestore: Para integrar com o Firebase.
+
+google_sign_in: Para o login com Google.
+
+http ou dio: Para fazer chamadas a APIs (como a do Mercado Pago).
+
+mercado_pago_sdk (ou similar): Para a integração de pagamentos.
+
+provider ou flutter_bloc: Para gestão de estado, essencial para manter a app organizada.
+
+III. APIs Essenciais que Precisamos Adquirir
+Terás de criar contas de programador nestas plataformas. A maioria tem um nível gratuito generoso.
+
+Google Maps Platform: É o coração da nossa aplicação. Precisarás de ativar as seguintes APIs na Google Cloud Console:
+
+Maps SDK for Android e Maps SDK for iOS: Para mostrar o mapa na app.
+
+Places API: A API mais importante para a "busca inteligente". Ela fornece o autocomplete de locais.
+
+Directions API: Para traçar a rota no mapa do ponto A ao B.
+
+Distance Matrix API: Para obter a distância e o tempo estimado de viagem, que são cruciais para calcular o preço.
+
+Firebase: Como mencionado, será o nosso backend. A criação de um projeto é gratuita.
+
+Mercado Pago API: Precisarás de criar uma conta de programador no Mercado Pago para obter as tuas credenciais de API e processar os pagamentos.
+
+IV. Como Reduzir Gastos Desnecessários com APIs (Ponto Crítico!)
+Esta é uma preocupação muito inteligente e importante. Os custos com APIs, especialmente a do Google Maps, podem escalar rapidamente se não forem geridos.
+
+Estratégias para Google Maps:
+
+Debouncing na Busca: Esta é a técnica mais importante! Não chames a Places API a cada tecla que o utilizador digita. Espera que ele faça uma pequena pausa (ex: 300 milissegundos) antes de fazer a chamada. Isto reduz o número de chamadas de 20 para 2 ou 3 por busca.
+
+Uso de Session Tokens: A Places API Autocomplete cobra por sessão, não por chamada, se usares "session tokens". Basicamente, tu dizes à Google: "todas estas chamadas de autocomplete fazem parte da mesma busca do utilizador". No final, quando o utilizador escolhe um local, fazes uma chamada final de "Place Details" com o mesmo token. Isto reduz drasticamente o custo da busca.
+
+Otimizar Chamadas de "Place Details": Quando fores buscar os detalhes de um local (como as coordenadas), especifica na chamada da API apenas os campos que precisas (geometry/location). Não peças fotos, reviews, etc., pois isso custa mais caro.
+
+Limitar a Frequência de Atualização do GPS: Não precisas de atualizar a posição do utilizador no mapa 10 vezes por segundo. Uma vez a cada poucos segundos é mais do que suficiente e economiza bateria e dados.
+
+Estratégias para Firebase:
+
+Aproveitar o Nível Gratuito: O Firebase tem um nível gratuito muito generoso. Podes desenvolver e até lançar a aplicação para um número limitado de utilizadores sem pagar nada.
+
+Otimizar Leituras da Base de Dados: O Firestore cobra principalmente por leituras e escritas. Estrutura os teus dados e as tuas consultas para ler apenas o mínimo necessário. Evita carregar listas enormes de dados de uma só vez.
+
+Estratégia Geral:
+
+Criar Alertas de Orçamento: Tanto na Google Cloud Platform como no Firebase, configura alertas de orçamento. P
 
 ## Visão Geral do Projeto
 
@@ -60,4 +186,6 @@ Estamos desenvolvendo um ecossistema de aplicativos (usuário, motorista e paine
 
 ## Próximos Passos (Gerenciados por `action_plan.md`)
 
-A partir de agora, as tarefas detalhadas serão gerenciadas no `action_plan.md`.
+A partir de agora, as tarefas detalhadas serão gerenciadas no `action_plan.md`. criando um historico com checklist
+
+Aqui vamos manter apenas o contexto atualizado 

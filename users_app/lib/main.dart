@@ -1,25 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:users_app/screens/authentication/splash_screen.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Carrega as variáveis de ambiente do arquivo .env
+  await dotenv.load(fileName: ".env");
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // --- Adicione este bloco de código ---
   if (kDebugMode) {
     // Conecta o Firebase Auth ao emulador local APENAS SE NÃO FOR WEB.
-    // Para web, o Google Sign-In funciona melhor com o serviço real do Firebase.
-    if (!kIsWeb) { // Adicione esta condição!
-      FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+    if (!kIsWeb) {
+      try {
+        FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+      } catch (e) {
+        // Hot restart pode causar um erro se o emulador já estiver configurado.
+        print('Erro ao configurar emulador do Auth (ignorado em debug): $e');
+      }
     }
   }
-  // --- Fim do bloco de código a ser adicionado ---
 
   runApp(const MyApp());
 }

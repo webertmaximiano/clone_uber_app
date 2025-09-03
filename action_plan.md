@@ -26,8 +26,8 @@ O objetivo desta fase é implementar a funcionalidade principal de solicitação
     - [x] Atualizar o conjunto de marcadores (`_markers`) e redesenhar o mapa.
 
 - [ ] **UI de Solicitação de Corrida:**
-  - [ ] Adicionar campos de entrada para origem e destino na `HomeScreen` ou em uma nova tela.
-  - [ ] Integrar a API de Geocoding (se não estiver já no `LocationService`) para converter endereços em coordenadas.
+  - [x] Adicionar campos de entrada para origem e destino na `HomeScreen` ou em uma nova tela.
+  - [x] Integrar a API de Geocoding (se não estiver já no `LocationService`) para converter endereços em coordenadas.
   - [ ] Adicionar um botão para "Solicitar Corrida".
   - [ ] Implementar autocompletar para campos de endereço (Google Places API).
 
