@@ -1,0 +1,23 @@
+# This file tracks properties of this Flutter project.
+# Used by Flutter tooling to track, build and provide correct metadata on this
+# project for Flutter tooling.
+
+version:
+  revision: "5f3edf2687868941d20228a78a44d0ec66fda1f6"
+  channel: "stable"
+
+project_type: app
+
+# Tracks metadata for the flutter migrate command
+migration:
+  platforms:
+    - platform: root
+      create_base_directory: true
+    - platform: web
+      create_base_directory: true
+    - platform: windows
+      create_base_directory: true
+    - platform: linux
+      create_base_directory: true
+    - platform: macos
+      create_base_directory: true

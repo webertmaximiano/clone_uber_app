@@ -44,3 +44,45 @@ O desenvolvimento de cada aplicativo é detalhado em seu próprio arquivo de tut
 *   **Fase 1:** [Tutorial do Aplicativo do Usuário](./users_app/TUTORIAL.md)
 *   **Fase 2:** Tutorial do Aplicativo do Motorista (em breve)
 *   **Fase 3:** Tutorial do Painel Admin (em breve)
+## 🧪 Teste de Integração Completo
+
+Após compilar todas as aplicações, execute o teste de integração para validar o fluxo completo:
+
+### Opção 1: Quick Start (5 minutos)
+```bash
+# Leia o resumo rápido
+cat INTEGRATION_TEST_QUICKSTART.md
+```
+
+### Opção 2: Teste Manual Detalhado (15 minutos)
+```bash
+# Guia passo-a-passo completo
+cat INTEGRATION_TEST_MANUAL.md
+```
+
+### Opção 3: Teste Automatizado
+```bash
+# Verifique pré-requisitos
+node check_prerequisites.js
+
+# Execute teste automatizado (em breve)
+node integration_test.js
+```
+
+### Documentação Completa de Testes
+- **[INTEGRATION_TEST_PLAN.md](./INTEGRATION_TEST_PLAN.md)** - Plano detalhado com 9 fases do teste
+- **[INTEGRATION_TEST_MANUAL.md](./INTEGRATION_TEST_MANUAL.md)** - Guia passo-a-passo para execução
+- **[INTEGRATION_TEST_QUICKSTART.md](./INTEGRATION_TEST_QUICKSTART.md)** - Resumo rápido de 5 minutos
+- **[check_prerequisites.js](./check_prerequisites.js)** - Validador de pré-requisitos
+- **[integration_test.js](./integration_test.js)** - Script de teste automatizado
+
+### Fluxo Testado
+```
+✅ Usuário cria corrida
+  → Motorista recebe notificação
+    → Motorista aceita
+      → Usuário notificado
+        → Corrida inicia
+          → Corrida completa
+            → Avaliação salva
+```

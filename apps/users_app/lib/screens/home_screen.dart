@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -6,10 +7,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:users_app/models/place_suggestion.dart';
+import 'package:users_app/models/ride_request.dart';
 import 'package:users_app/screens/authentication/login_screen.dart';
+import 'package:users_app/screens/ride_request_screen.dart';
+import 'package:users_app/screens/ride_tracking_screen.dart';
+import 'package:users_app/screens/rating_screen.dart';
+import 'package:users_app/screens/payment_method_screen.dart';
 import 'package:users_app/services/location_service.dart';
 import 'package:users_app/services/driver_service.dart';
 import 'package:users_app/services/places_service.dart';
+import 'package:users_app/services/ride_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -23,9 +30,10 @@ class _HomeScreenState extends State<HomeScreen> {
   final LocationService _locationService = LocationService();
   final DriverService _driverService = DriverService();
   final PlacesService _placesService = PlacesService();
+  final RideService _rideService = RideService();
 
-  Position? _currentPosition; // Variável para guardar a posição atual
-  final Set<Marker> _userMarker = {}; // Marcador do usuário separado
+  Position? _currentPosition;
+  final Set<Marker> _userMarker = {};
 
   // Controladores para os campos de texto
   final TextEditingController _originController = TextEditingController();
@@ -232,8 +240,59 @@ class _HomeScreenState extends State<HomeScreen> {
                       border: InputBorder.none,
                     ),
                   ),
+                  const SizedBox(height: 16),
+                  // Botão de solicitar corrida
+                  if (_originController.text.isNotEmpty && _destinationController.text.isNotEmpty)
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: _openPaymentAndRequestRide,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.deepPurple,
+                        ),
+                        child: const Text(
+                          'Solicitar Corrida',
+                          style: TextStyle(color: Colors.white, fontSize: 16),
+                        ),
+                      ),
+                    ),
                 ],
               ),
+            ),
+          ),
+          // Botão de histórico e configurações (menu flutuante)
+          Positioned(
+            bottom: 20,
+            right: 20,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                FloatingActionButton(
+                  mini: true,
+                  heroTag: 'payment',
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const PaymentMethodScreen()),
+                    );
+                  },
+                  backgroundColor: Colors.deepPurple,
+                  child: const Icon(Icons.payment),
+                ),
+                const SizedBox(height: 8),
+                FloatingActionButton(
+                  mini: true,
+                  heroTag: 'history',
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Histórico de corridas - Em desenvolvimento')),
+                    );
+                  },
+                  backgroundColor: Colors.blue,
+                  child: const Icon(Icons.history),
+                ),
+              ],
             ),
           ),
           // Camada 3: A Lista de Sugestões
@@ -278,5 +337,86 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
+  }
+
+  Future<void> _openPaymentAndRequestRide() async {
+    try {
+      // Obter a posição do destino através do Places API
+      if (_currentPosition == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Localização atual não disponível')),
+        );
+        return;
+      }
+
+      // Obter coordenadas do destino (simplificado - usar coordenadas aproximadas)
+      final destinationSuggestions = await _placesService.getAutocompleteSuggestions(
+        _destinationController.text,
+        LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
+      );
+
+      if (destinationSuggestions.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Destino não encontrado')),
+        );
+        return;
+      }
+
+      final selectedDestination = destinationSuggestions.first;
+
+      // Calcular a distância aproximada (usando fórmula simples)
+      final estimatedDistance = _calculateDistance(
+        _currentPosition!.latitude,
+        _currentPosition!.longitude,
+        -23.5505,
+        -46.6333, // Coordenadas padrão (São Paulo)
+      );
+
+      // Navegar para RideRequestScreen
+      final result = await Navigator.push<RideRequest>(
+        context,
+        MaterialPageRoute(
+          builder: (context) => RideRequestScreen(
+            origin: _originController.text,
+            originLat: _currentPosition!.latitude,
+            originLng: _currentPosition!.longitude,
+            destination: _destinationController.text,
+            destinationLat: -23.5505,
+            destinationLng: -46.6333,
+            estimatedDistance: estimatedDistance,
+          ),
+        ),
+      );
+
+      if (result != null) {
+        // Limpar os campos de entrada
+        _originController.clear();
+        _destinationController.clear();
+
+        // Navegar para RideTrackingScreen
+        if (mounted) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => RideTrackingScreen(rideRequest: result),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (kDebugMode) print('Erro ao solicitar corrida: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao solicitar corrida: $e')),
+      );
+    }
+  }
+
+  // Função auxiliar para calcular distância entre coordenadas (Haversine)
+  double _calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+    const p = 0.017453292519943295;
+    final a = 0.5 -
+        cos((lat2 - lat1) * p) / 2 +
+        cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2;
+    return 12742 * asin(sqrt(a));
   }
 }
